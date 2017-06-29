@@ -105,6 +105,51 @@ public class RegionMergingTest
 		Assert.assertEquals( 4, merges.size() );
 		Assert.assertEquals( 3, merges.get( 0 ) );
 		Assert.assertEquals( 5, merges.get( 2 ) );
+	}
+
+	@Test
+	public void testMergeAll()
+	{
+
+		final TDoubleArrayList store = new TDoubleArrayList();
+		final EdgeMerger merger = new EdgeMerger.MIN_AFFINITY_MERGER();
+		final EdgeWeight ew = ( e, count1, count2 ) -> 1 - e.affinity();
+		final Edge e = new Edge( store, merger.dataSize() );
+
+		final double lowAffinity = 0.1;
+		final double midAffinity = 0.5;
+		final double highAffinity = 0.9;
+
+		e.add( Double.NaN, lowAffinity, 0, 2, 1 );
+		e.add( Double.NaN, lowAffinity, 1, 2, 1 );
+		e.add( Double.NaN, lowAffinity, 1, 5, 1 );
+		e.add( Double.NaN, highAffinity, 2, 3, 1 );
+		e.add( Double.NaN, lowAffinity, 2, 6, 1 );
+		e.add( Double.NaN, midAffinity, 3, 4, 1 );
+		e.add( Double.NaN, lowAffinity, 3, 7, 1 );
+		e.add( Double.NaN, lowAffinity, 4, 8, 1 );
+
+		final TLongLongHashMap counts = new TLongLongHashMap();
+		for ( int i = 0; i < e.size(); ++i )
+		{
+			e.setIndex( i );
+			counts.put( e.from(), 1 );
+			counts.put( e.to(), 1 );
+			e.setValid();
+			e.setStale();
+		}
+
+		final UndirectedGraph g = new UndirectedGraph( 9, store, merger );
+
+		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 1.0 );
+
+		Assert.assertEquals( 2 * e.size(), merges.size() );
+
+		for ( int i = 0; i < e.size(); ++i )
+		{
+			e.setIndex( i );
+			Assert.assertTrue( e.isObsolete() );
+		}
 
 	}
 
