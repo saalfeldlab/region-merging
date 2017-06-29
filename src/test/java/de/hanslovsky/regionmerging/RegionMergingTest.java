@@ -94,6 +94,8 @@ public class RegionMergingTest
 			e.setIndex( i );
 			counts.put( e.from(), 1 );
 			counts.put( e.to(), 1 );
+			e.setValid();
+			e.setStale();
 		}
 
 		final UndirectedGraph g = new UndirectedGraph( 9, store, merger );
