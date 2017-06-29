@@ -69,7 +69,7 @@ public class UndirectedGraph implements Serializable
 		assert newNode == e.from() || newNode == e.to(): "New node index must be either from or to index";
 
 		final long from = e.from();
-		final long to = ( int ) e.to();
+		final long to = e.to();
 
 		final long otherNode = from == newNode ? to : from;
 
@@ -114,12 +114,14 @@ public class UndirectedGraph implements Serializable
 					keepEdges.put( nodeId, edgeId );
 					this.e2.setObsolete();
 					this.e1.setStale();
+					this.e1.setValid();
 				}
 				else
 				{
 					edgeMerger.merge( this.e1, this.e2 );
 					this.e1.setObsolete();
 					this.e2.setStale();
+					this.e2.setValid();
 				}
 			}
 			else
@@ -140,6 +142,7 @@ public class UndirectedGraph implements Serializable
 			otherMap.put( newNode, edgeId );
 			this.e1.setIndex( edgeId );
 			this.e1.setStale();
+			this.e1.setValid();
 			this.e1.from( nodeId );
 			this.e1.to( newNode );
 		}
