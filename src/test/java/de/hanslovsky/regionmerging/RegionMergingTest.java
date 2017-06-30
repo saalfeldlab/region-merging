@@ -54,7 +54,7 @@ public class RegionMergingTest
 		Assert.assertEquals( 3, merges.get( 0 ) );
 
 		e.setIndex( ( int ) merges.get( 0 ) );
-		Assert.assertEquals( e.weight(), Double.longBitsToDouble( merges.get( 1 ) ), 1e-20 );
+		Assert.assertEquals( 1 - highAffinity, Double.longBitsToDouble( merges.get( 1 ) ), 1e-20 );
 		Assert.assertFalse( e.isValid() );
 
 		for ( int i = 0; i < e.size(); ++i )

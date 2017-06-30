@@ -75,12 +75,14 @@ public class UndirectedGraph implements Serializable
 
 		e.setObsolete();
 
-		final TLongIntHashMap keepEdges = nodeEdgeMap.get( newNode );
+		final TLongIntHashMap edgesOfNewNode = nodeEdgeMap.get( newNode );
 		final TLongIntHashMap discardEdges = nodeEdgeMap.get( otherNode );
 
-		keepEdges.remove( otherNode );
+		// remove e = (from, to) from node edge map (I)
+		edgesOfNewNode.remove( otherNode );
 		discardEdges.remove( newNode );
 
+		// add all edges into edgesOfNewNode and merge/update if applicable
 		for ( final TLongIntIterator discardIt = discardEdges.iterator(); discardIt.hasNext(); )
 		{
 			discardIt.advance();
@@ -95,15 +97,11 @@ public class UndirectedGraph implements Serializable
 				continue;
 			}
 
-			if ( keepEdges.contains( nodeId ) )
+			// merge edges if other node is connected to both nodes
+			if ( edgesOfNewNode.contains( nodeId ) )
 			{
-//				if ( keepEdges.get( nodeId ) == edgeId )
-//				{
-//					this.e1.setStale();
-//					continue;
-//				}
 
-				this.e2.setIndex( keepEdges.get( nodeId ) );
+				this.e2.setIndex( edgesOfNewNode.get( nodeId ) );
 				final double w1 = this.e1.weight();
 				final double w2 = this.e2.weight();
 
@@ -111,7 +109,7 @@ public class UndirectedGraph implements Serializable
 				if ( w1 < w2 )
 				{
 					edgeMerger.merge( this.e2, this.e1 );
-					keepEdges.put( nodeId, edgeId );
+					edgesOfNewNode.put( nodeId, edgeId );
 					this.e2.setObsolete();
 					this.e1.setStale();
 					this.e1.setValid();
@@ -125,12 +123,12 @@ public class UndirectedGraph implements Serializable
 				}
 			}
 			else
-				keepEdges.put( nodeId, edgeId );
+				edgesOfNewNode.put( nodeId, edgeId );
 //				this.e1.setStale();
 		}
 
 
-		for ( final TLongIntIterator keepIt = keepEdges.iterator(); keepIt.hasNext(); )
+		for ( final TLongIntIterator keepIt = edgesOfNewNode.iterator(); keepIt.hasNext(); )
 		{
 			keepIt.advance();
 			final long nodeId = keepIt.key();
@@ -150,6 +148,95 @@ public class UndirectedGraph implements Serializable
 		return discardEdges;
 
 	}
+
+//	public TLongIntHashMap contract(
+//			final Edge e,
+//			final long newNode,
+//			final EdgeMerger edgeMerger )
+//	{
+//		assert newNode == e.from() || newNode == e.to(): "New node index must be either from or to index";
+//
+//		final long from = e.from();
+//		final long to = e.to();
+//
+//		final long otherNode = from == newNode ? to : from;
+//
+//		e.setObsolete();
+//
+//		final TLongIntHashMap keepEdges = nodeEdgeMap.get( newNode );
+//		final TLongIntHashMap discardEdges = nodeEdgeMap.get( otherNode );
+//
+//		keepEdges.remove( otherNode );
+//		discardEdges.remove( newNode );
+//
+//		for ( final TLongIntIterator discardIt = discardEdges.iterator(); discardIt.hasNext(); )
+//		{
+//			discardIt.advance();
+//			final long nodeId = discardIt.key();
+//			final int edgeId = discardIt.value();
+//
+//			this.e1.setIndex( edgeId );
+//
+//			if ( nodeId == otherNode || this.e1.isObsolete() )
+//			{
+//				this.e1.setObsolete();
+//				continue;
+//			}
+//
+//			if ( keepEdges.contains( nodeId ) )
+//			{
+////				if ( keepEdges.get( nodeId ) == edgeId )
+////				{
+////					this.e1.setStale();
+////					continue;
+////				}
+//
+//				this.e2.setIndex( keepEdges.get( nodeId ) );
+//				final double w1 = this.e1.weight();
+//				final double w2 = this.e2.weight();
+//
+//				// smaller weight edge is in wrong map
+//				if ( w1 < w2 )
+//				{
+//					edgeMerger.merge( this.e2, this.e1 );
+//					keepEdges.put( nodeId, edgeId );
+//					this.e2.setObsolete();
+//					this.e1.setStale();
+//					this.e1.setValid();
+//				}
+//				else
+//				{
+//					edgeMerger.merge( this.e1, this.e2 );
+//					this.e1.setObsolete();
+//					this.e2.setStale();
+//					this.e2.setValid();
+//				}
+//			}
+//			else
+//				keepEdges.put( nodeId, edgeId );
+////				this.e1.setStale();
+//		}
+//
+//
+//		for ( final TLongIntIterator keepIt = keepEdges.iterator(); keepIt.hasNext(); )
+//		{
+//			keepIt.advance();
+//			final long nodeId = keepIt.key();
+//			final int edgeId = keepIt.value();
+//
+//			final TLongIntHashMap otherMap = nodeEdgeMap.get( nodeId );
+//			otherMap.remove( from );
+//			otherMap.remove( to );
+//			otherMap.put( newNode, edgeId );
+//			this.e1.setIndex( edgeId );
+//			this.e1.setStale();
+//			this.e1.from( nodeId );
+//			this.e1.to( newNode );
+//		}
+//
+//		return discardEdges;
+//
+//	}
 
 	private static TLongObjectHashMap< TLongIntHashMap > nodeEdgeMap( final TDoubleArrayList edges, final int nNodes, final EdgeMerger edgeMerger, final int edgeDataSize )
 	{

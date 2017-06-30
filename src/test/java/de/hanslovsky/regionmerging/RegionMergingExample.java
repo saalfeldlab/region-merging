@@ -166,7 +166,7 @@ public class RegionMergingExample
 		final MedianAffinityWeight weight = new EdgeWeight.MedianAffinityWeight( nBins, 0.0, 1.0 );
 
 		System.out.println( "n edges: " + e.size() );
-		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, weight, counts, 1.0 );
+		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, weight, counts, 0.8 );
 		System.out.println( merges );
 
 		for ( int i = 0; i < merges.size(); i += 2 )
