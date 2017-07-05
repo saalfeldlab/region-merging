@@ -1,7 +1,11 @@
 package de.hanslovsky.regionmerging;
 
+import java.lang.invoke.MethodHandles;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.hanslovsky.graph.UndirectedGraph;
 import de.hanslovsky.graph.edge.Edge;
@@ -14,9 +18,13 @@ import gnu.trove.map.hash.TLongLongHashMap;
 public class RegionMergingTest
 {
 
+	public static Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
+
 	@Test
 	public void testSingleMerge()
 	{
+
+		LOG.debug( "Running test: single merge" );
 
 		final TDoubleArrayList store = new TDoubleArrayList();
 		final EdgeMerger merger = new EdgeMerger.MIN_AFFINITY_MERGER();
@@ -72,6 +80,8 @@ public class RegionMergingTest
 	public void testConsecutiveMerge()
 	{
 
+		LOG.debug( "Running test: consecutive merge" );
+
 		final TDoubleArrayList store = new TDoubleArrayList();
 		final EdgeMerger merger = new EdgeMerger.MIN_AFFINITY_MERGER();
 		final EdgeWeight ew = ( e, count1, count2 ) -> 1 - e.affinity();
@@ -112,6 +122,8 @@ public class RegionMergingTest
 	@Test
 	public void testMergeAll()
 	{
+
+		LOG.debug( "Running test: merge everything" );
 
 		final TDoubleArrayList store = new TDoubleArrayList();
 		final EdgeMerger merger = new EdgeMerger.MIN_AFFINITY_MERGER();

@@ -3,9 +3,8 @@ package de.hanslovsky.graph;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.hanslovsky.graph.edge.Edge;
 import de.hanslovsky.graph.edge.EdgeMerger;
@@ -17,10 +16,7 @@ import gnu.trove.map.hash.TLongObjectHashMap;
 public class UndirectedGraph implements Serializable
 {
 
-	public static final Logger LOG = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
-	{
-		LOG.setLevel( Level.INFO );
-	}
+	public static final Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
 	private final TDoubleArrayList edges;
 

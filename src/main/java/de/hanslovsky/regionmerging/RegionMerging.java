@@ -1,7 +1,12 @@
 package de.hanslovsky.regionmerging;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.hanslovsky.graph.UndirectedGraph;
 import de.hanslovsky.graph.edge.Edge;
@@ -18,6 +23,27 @@ import gnu.trove.set.hash.TLongHashSet;
 
 public class RegionMerging
 {
+
+	public static Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
+
+	public static class Stringify
+	{
+
+		private final Supplier< String > generator;
+
+		public Stringify( final Supplier< String > generator )
+		{
+			super();
+			this.generator = generator;
+		}
+
+		@Override
+		public String toString()
+		{
+			return generator.get();
+		}
+
+	}
 
 	public static TLongArrayList mergeLocallyMinimalEdges( final UndirectedGraph g, final EdgeMerger merger, final EdgeWeight edgeWeight, final TLongLongHashMap counts, final double threshold )
 	{
@@ -104,10 +130,11 @@ public class RegionMerging
 					}
 				}
 
-			// TODO Replace with log!
-			System.out.println( "At iteration " + iteration + " " +
-					IntStream.range( 0, localMinimum.length ).mapToObj( i -> localMinimum[ i ] ).filter( m -> m ).count() + " local minima " +
-					IntStream.range( 0, localMinimum.length ).mapToObj( i -> isInPlateau[ i ] ).filter( m -> m ).count() + " plateau edges -- changed? " + changed );
+			LOG.debug(
+					"Finished iteration {} with {} local minima and {} plateau edges.",
+					iteration,
+					new Stringify( () -> "" + IntStream.range( 0, localMinimum.length ).mapToObj( i -> localMinimum[ i ] ).filter( m -> m ).count() ),
+					new Stringify( () -> "" + IntStream.range( 0, localMinimum.length ).mapToObj( i -> isInPlateau[ i ] ).filter( m -> m ).count() ) );
 
 			++iteration;
 		}
