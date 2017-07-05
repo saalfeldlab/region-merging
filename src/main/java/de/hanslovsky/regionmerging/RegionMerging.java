@@ -204,8 +204,8 @@ public class RegionMerging
 						plateausUnionFind.join( plateausUnionFind.findRoot( k ), plateausUnionFind.findRoot( otherEdgeIndex ) );
 					}
 
-					if ( isPlateau )
-						System.out.print( "WAS DA LOS EY? " + e1 + " " + e2 );
+//					if ( isPlateau )
+//						System.out.print( "WAS DA LOS EY? " + e1 + " " + e2 );
 
 				}
 			}
