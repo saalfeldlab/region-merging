@@ -232,7 +232,7 @@ public class Edge implements Serializable
 	@Override
 	public String toString()
 	{
-		return "( " + k / stride + " , " + from() + " , " + to() + " , " + weight() + " , " + affinity() + " , " + multiplicity() + " , " + isStale() + " , " + isObsolete() + " )";
+		return "( " + k / stride + " , " + from() + " , " + to() + " , " + weight() + " , " + affinity() + " , " + multiplicity() + " , stale: " + isStale() + " , active: " + isActive() + " , obsolete: " + isObsolete() + " )";
 	}
 
 }
