@@ -193,7 +193,7 @@ public class RegionMerging
 			return false;
 
 		final long newNode = dj.join( r1, r2 );
-		g.contract( e, newNode, merger );
+		g.contract( e, newNode, r1, r2, merger );
 		merges.add( index );
 		merges.add( Double.doubleToRawLongBits( e.weight() ) );
 		return true;

@@ -64,12 +64,11 @@ public class UndirectedGraph implements Serializable
 	public TLongIntHashMap contract(
 			final Edge e,
 			final long newNode,
+			final long from,
+			final long to,
 			final EdgeMerger edgeMerger )
 	{
-		assert newNode == e.from() || newNode == e.to(): "New node index must be either from or to index";
-
-		final long from = e.from();
-		final long to = e.to();
+		assert newNode == from || newNode == to: "New node index must be either from or to index";
 
 		final long otherNode = from == newNode ? to : from;
 
@@ -141,8 +140,6 @@ public class UndirectedGraph implements Serializable
 			this.e1.setIndex( edgeId );
 			this.e1.setStale();
 			this.e1.setValid();
-			this.e1.from( nodeId );
-			this.e1.to( newNode );
 		}
 
 		return discardEdges;
