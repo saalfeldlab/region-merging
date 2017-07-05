@@ -136,8 +136,6 @@ public interface EdgeCreator extends EdgeDataSize
 		public DoubleStream createData( final double weight, final double affinity, final long from, final long to, final long multiplicity )
 		{
 			final int bin = ( int ) ( ( affinity - min ) / binWidth );
-//			if ( from == 12 && to == 16 || from == 16 && to == 12 )
-//				System.out.println( "CREATING EDGE FOR 12 AND 16: " + weight + " " + affinity + " " + IntStream.range( 0, nBins + 1 ).mapToObj( i -> ( i == 0 ? 1 : i == bin + 1 ? 1 : 0 ) ).collect( Collectors.toList() ) );
 			return IntStream.range( 0, dataSize() ).mapToDouble( i -> Edge.ltd( i == 0 ? 1 : i == bin + 1 ? 1 : 0 ) );
 		}
 

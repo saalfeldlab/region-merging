@@ -82,13 +82,6 @@ public interface EdgeMerger extends Serializable, EdgeDataSize
 			final long m = m1 + m2;
 			target.multiplicity( m );
 
-//			if ( target.from() == 12 && target.to() == 16 || target.from() == 16 && target.to() == 12 )
-//			{
-//				final List< String > dat1 = IntStream.range( 0, target.getDataSize() ).mapToObj( idx -> Edge.dtl( source.getData( idx ) ) + "" ).collect( Collectors.toList() );
-//				final List< String > dat2 = IntStream.range( 0, target.getDataSize() ).mapToObj( idx -> Edge.dtl( source.getData( idx ) ) + "" ).collect( Collectors.toList() );
-//				System.out.println( "MERGING EDGE INCLUDING 12 and 16 : " + target + " " + dat1 + " " + dat2 );
-//			}
-
 			for ( int entry = 0; entry < dataSize; ++entry )
 			{
 				final long d1 = Edge.dtl( source.getData( entry ) );

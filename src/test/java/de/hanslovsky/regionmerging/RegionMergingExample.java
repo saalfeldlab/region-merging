@@ -1,6 +1,5 @@
 package de.hanslovsky.regionmerging;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import de.hanslovsky.graph.UndirectedGraph;
@@ -45,11 +44,6 @@ public class RegionMergingExample
 		final ImagePlus affp = new ImagePlus( affPath );
 		final ImagePlus zwsp = new ImagePlus( zwsPath );
 
-//		new ImageJ();
-//		affp.show();
-//		zwsp.show();
-//		System.out.print( zwsPath + " " + zwsp );
-
 		final RandomAccessibleInterval< FloatType > aff = ImageJFunctions.wrapFloat( affp );
 		final RandomAccessibleInterval< UnsignedShortType > zws = ArrayImgs.unsignedShorts( ( short[] ) zwsp.getProcessor().getPixels(), zwsp.getWidth(), zwsp.getHeight() );
 
@@ -64,8 +58,6 @@ public class RegionMergingExample
 		final Edge dummy = new Edge( new TDoubleArrayList(), creator.dataSize() );
 		dummy.setIndex( 0 );
 
-		System.out.println( Arrays.toString( Intervals.dimensionsAsLongArray( aff ) ) );
-
 		final int nDim = zws.numDimensions();
 		for ( int d = 0; d < nDim; ++d )
 		{
@@ -75,14 +67,11 @@ public class RegionMergingExample
 			final long[] min1 = Intervals.minAsLongArray( zws );
 			final long[] max1 = Intervals.maxAsLongArray( zws );
 			max1[ d ] -= 1;
-			System.out.println( Arrays.toString( Intervals.dimensionsAsLongArray( affHs ) ) + " " + Arrays.toString( min1 ) + Arrays.toString( max1 ) );
 			final Cursor< UnsignedShortType > c1 = Views.flatIterable( Views.interval( zws, min1, max1 ) ).cursor();
 			final RandomAccess< UnsignedShortType > access = zws.randomAccess();
 			final Cursor< FloatType > a = Views.flatIterable( Views.interval( affHs, min1, max1 ) ).cursor();
-			final int i = 0;
 			while ( a.hasNext() )
 			{
-//				System.out.println( i++ );
 				final float val = a.next().get();
 				c1.fwd();
 
@@ -111,7 +100,6 @@ public class RegionMergingExample
 
 				if ( m1.contains( l2 ) )
 				{
-//					System.out.println( "Merging edges for " + l1 + " " + l2 );
 					final int idx = m1.get( l2 );
 					assert m2.contains( l1 ) && m2.get( l1 ) == idx;
 
@@ -123,7 +111,6 @@ public class RegionMergingExample
 				}
 				else
 				{
-//					System.out.println( "Connecting " + l1 + " " + l2 );
 					m1.put( l2, e.size() );
 					m2.put( l1, e.size() );
 					creator.create( e, Double.NaN, val, lower, upper, 1 );
@@ -165,9 +152,7 @@ public class RegionMergingExample
 
 		final MedianAffinityWeight weight = new EdgeWeight.MedianAffinityWeight( nBins, 0.0, 1.0 );
 
-		System.out.println( "n edges: " + e.size() );
 		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, weight, counts, 0.8 );
-		System.out.println( merges );
 
 		for ( int i = 0; i < merges.size(); i += 2 )
 		{
@@ -194,7 +179,7 @@ public class RegionMergingExample
 				ImageJFunctions.show( zws, "ock" );
 				ImageJFunctions.show( converted, "orig" );
 				ImageJFunctions.show( mergedColor, "merged" );
-				System.out.println( "merges: " + merges.size() );
+				System.out.println( "number of merges: " + merges.size() / 2 );
 				ImageJFunctions.show( merged, "nocolor" );
 				ImageJFunctions.show( aff, "aff" );
 

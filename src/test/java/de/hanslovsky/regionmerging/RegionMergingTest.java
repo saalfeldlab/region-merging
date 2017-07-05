@@ -47,12 +47,8 @@ public class RegionMergingTest
 
 		final UndirectedGraph g = new UndirectedGraph( 9, store, merger );
 
-//		for ( int i = 0; i < e.size(); ++i )
-//			System.out.println( e.toString() );
-
 		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.5 );
 
-		System.out.println( "merges " + merges.size() );
 		Assert.assertEquals( 2, merges.size() );
 		Assert.assertEquals( 3, merges.get( 0 ) );
 

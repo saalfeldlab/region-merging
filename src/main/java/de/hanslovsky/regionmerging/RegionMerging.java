@@ -102,26 +102,10 @@ public class RegionMerging
 					}
 				}
 
-//			System.out.println( "At iteration " + iteration + " " + Arrays.toString( localMinimum ) + " " + Arrays.toString( isInPlateau ) );
+			// TODO Replace with log!
 			System.out.println( "At iteration " + iteration + " " +
 					IntStream.range( 0, localMinimum.length ).mapToObj( i -> localMinimum[ i ] ).filter( m -> m ).count() + " local minima " +
 					IntStream.range( 0, localMinimum.length ).mapToObj( i -> isInPlateau[ i ] ).filter( m -> m ).count() + " plateau edges -- changed? " + changed );
-
-			if ( !changed )
-				for ( int i = 0; i < localMinimum.length; ++i )
-					if ( !localMinimum[ i ] && isInPlateau[ i ] )
-					{
-						e1.setIndex( i );
-
-						final long r1 = dj.findRoot( e1.from() );
-						final long r2 = dj.findRoot( e1.to() );
-
-						System.out.println( " WAAAT  ?" + i + " " + localMinimum[ i ] + " " + isInPlateau[ i ] + " " + e1.isValid() + " " + r1 + " " + r2 + " " + e1.toString() );
-					}
-//				e1.setIndex( 270 );
-//				System.out.println( "270: " + localMinimum[ 270 ] + " " + e1.isValid() + " " + isInPlateau[ 270 ] + " " + e1 );
-//				System.out.println( g.nodeEdgeMap().get( e1.from() ) );
-//				System.out.println( g.nodeEdgeMap().get( e1.to() ) );
 
 			++iteration;
 		}
@@ -190,9 +174,6 @@ public class RegionMerging
 						isPlateau = true;
 						plateausUnionFind.join( plateausUnionFind.findRoot( k ), plateausUnionFind.findRoot( otherEdgeIndex ) );
 					}
-
-//					if ( isPlateau )
-//						System.out.print( "WAS DA LOS EY? " + e1 + " " + e2 );
 
 				}
 			}
