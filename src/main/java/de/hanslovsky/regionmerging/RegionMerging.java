@@ -183,16 +183,7 @@ public class RegionMerging
 					e2.setIndex( otherEdgeIndex );
 					final double w2 = e2.weight();
 
-					if ( e2.isObsolete() )
-					{
-						System.out.println( "Why is obsolete edge still in play?" + e2.isValid() + " " + e2.isObsolete() + " " + e2.toString() );
-						continue;
-					}
-
 					minimumValue = Math.min( w2, minimumValue );
-
-					if ( k == 227 )
-						System.out.println( "K=" + k + " other=" + otherEdgeIndex + " " + w + " " + w2 + " " + ( w2 < w ) + " " + e1.isValid() + " " + e2.isValid() );
 
 					if ( w == w2 )
 					{
