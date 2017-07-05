@@ -84,7 +84,8 @@ public class RegionMerging
 				else if ( isPlateau )
 				{
 					final long root = plateausUnionFind.findRoot( k );
-					isMinimumPlateau[ ( int ) root ] &= isMinimum;
+					// no &&= in java
+					isMinimumPlateau[ ( int ) root ] &= isMinimum && !nonContractingEdges.contains( k );
 					if ( !plateauRoots.contains( root ) )
 						plateauRoots.add( root );
 				}
