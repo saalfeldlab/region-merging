@@ -55,7 +55,7 @@ public class RegionMerging
 					e1.weight( edgeWeight.weight( e1, counts.get( e1.from() ), counts.get( e1.to() ) ) );
 					e1.setActive();
 				}
-				else
+				else if ( e1.isObsolete() )
 					e1.weight( Double.MAX_VALUE );
 			}
 			final boolean[] localMinimum = new boolean[ e1.size() ];
