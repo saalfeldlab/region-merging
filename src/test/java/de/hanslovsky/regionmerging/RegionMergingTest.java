@@ -18,6 +18,8 @@ import gnu.trove.map.hash.TLongLongHashMap;
 public class RegionMergingTest
 {
 
+	public static MergeNotify NOTIFY = ( n1, n2, nn, w ) -> {};
+
 	public static Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
 	@Test
@@ -55,7 +57,7 @@ public class RegionMergingTest
 
 		final UndirectedGraph g = new UndirectedGraph( 9, store, merger );
 
-		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.5 );
+		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.5, NOTIFY ).getA();
 
 		Assert.assertEquals( 2, merges.size() );
 		Assert.assertEquals( 3, merges.get( 0 ) );
@@ -64,10 +66,12 @@ public class RegionMergingTest
 		Assert.assertEquals( 1 - highAffinity, Double.longBitsToDouble( merges.get( 1 ) ), 1e-20 );
 		Assert.assertFalse( e.isValid() );
 
-		for ( int i = 0; i < e.size(); ++i ) {
+		for ( int i = 0; i < e.size(); ++i )
+		{
 			e.setIndex( i );
 			Assert.assertTrue( "Edge state for i=" + i + ": " + e.toString(), i == 3 ? e.isObsolete() : e.isValid() );
-			if ( e.isValid() ) {
+			if ( e.isValid() )
+			{
 				Assert.assertTrue( e.isActive() );
 				Assert.assertEquals( lowAffinity, e.affinity(), 1e-20 );
 				Assert.assertEquals( 1 - lowAffinity, e.weight(), 1e-20 );
@@ -112,7 +116,7 @@ public class RegionMergingTest
 
 		final UndirectedGraph g = new UndirectedGraph( 9, store, merger );
 
-		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.8 );
+		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.8, NOTIFY ).getA();
 
 		Assert.assertEquals( 4, merges.size() );
 		Assert.assertEquals( 3, merges.get( 0 ) );
@@ -155,7 +159,7 @@ public class RegionMergingTest
 
 		final UndirectedGraph g = new UndirectedGraph( 9, store, merger );
 
-		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 1.0 );
+		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 1.0, NOTIFY ).getA();
 
 		Assert.assertEquals( 2 * e.size(), merges.size() );
 

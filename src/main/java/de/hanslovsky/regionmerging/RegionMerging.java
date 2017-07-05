@@ -20,6 +20,8 @@ import gnu.trove.map.hash.TLongIntHashMap;
 import gnu.trove.map.hash.TLongLongHashMap;
 import gnu.trove.set.hash.TIntHashSet;
 import gnu.trove.set.hash.TLongHashSet;
+import net.imglib2.util.Pair;
+import net.imglib2.util.ValuePair;
 
 public class RegionMerging
 {
@@ -45,18 +47,25 @@ public class RegionMerging
 
 	}
 
-	public static TLongArrayList mergeLocallyMinimalEdges( final UndirectedGraph g, final EdgeMerger merger, final EdgeWeight edgeWeight, final TLongLongHashMap counts, final double threshold )
+	public static Pair< TLongArrayList, HashMapStoreUnionFind > mergeLocallyMinimalEdges( final UndirectedGraph g, final EdgeMerger merger, final EdgeWeight edgeWeight, final TLongLongHashMap counts, final double threshold, final MergeNotify notify )
 	{
-		return mergeLocallyMinimalEdges( g, merger, edgeWeight, counts, threshold, new TIntHashSet() );
+		return mergeLocallyMinimalEdges( g, merger, edgeWeight, counts, threshold, new TIntHashSet(), notify );
 	}
 
-	public static TLongArrayList mergeLocallyMinimalEdges( final UndirectedGraph g, final EdgeMerger merger, final EdgeWeight edgeWeight, final TLongLongHashMap counts, final double threshold, final TIntHashSet nonContractingEdges )
+	public static Pair< TLongArrayList, HashMapStoreUnionFind > mergeLocallyMinimalEdges(
+			final UndirectedGraph g,
+			final EdgeMerger merger,
+			final EdgeWeight edgeWeight,
+			final TLongLongHashMap counts,
+			final double threshold,
+			final TIntHashSet nonContractingEdges,
+			final MergeNotify notify )
 	{
 		final TDoubleArrayList edges = g.edges();
 		final Edge e1 = new Edge( edges, merger.dataSize() );
 		final Edge e2 = new Edge( edges, merger.dataSize() );
 
-		final HashMapStoreUnionFind dj = new HashMapStoreUnionFind();
+		final HashMapStoreUnionFind regionMapping = new HashMapStoreUnionFind();
 
 		final TLongArrayList merges = new TLongArrayList();
 
@@ -78,7 +87,7 @@ public class RegionMerging
 				e1.setIndex( k );
 				if ( e1.isValid() && e1.isStale() )
 				{
-					e1.weight( edgeWeight.weight( e1, counts.get( e1.from() ), counts.get( e1.to() ) ) );
+					e1.weight( edgeWeight.weight( e1, counts.get( regionMapping.findRoot( e1.from() ) ), counts.get( regionMapping.findRoot( e1.to() ) ) ) );
 					e1.setActive();
 				}
 				else if ( e1.isObsolete() )
@@ -87,12 +96,14 @@ public class RegionMerging
 			final boolean[] localMinimum = new boolean[ e1.size() ];
 			Arrays.fill( localMinimum, true );
 			final boolean[] isInPlateau = new boolean[ e1.size() ];
+			final boolean[] isNeighborOfNonContractable = new boolean[ e1.size() ];
+
 			final HashMapStoreUnionFind plateausUnionFind = new HashMapStoreUnionFind();
 
-			findMinimaAndPlateaus( g, localMinimum, isInPlateau, e1, e2, plateausUnionFind, threshold );
+			findMinimaAndPlateaus( g, localMinimum, isInPlateau, isNeighborOfNonContractable, nonContractingEdges, e1, e2, plateausUnionFind, threshold );
 
-			final boolean[] isMinimumPlateau = new boolean[ e1.size() ];
-			Arrays.fill( isMinimumPlateau, true );
+			final boolean[] isValidPlateau = new boolean[ e1.size() ];
+			Arrays.fill( isValidPlateau, true );
 			final TLongHashSet plateauRoots = new TLongHashSet();
 
 			for ( int k = 0; k < localMinimum.length; ++k )
@@ -103,16 +114,17 @@ public class RegionMerging
 				final boolean isMinimum = localMinimum[ k ];
 				final boolean isPlateau = isInPlateau[ k ];
 				final boolean isContractible = !nonContractingEdges.contains( k );
+				final boolean noNonContractibleNeighbor = !isNeighborOfNonContractable[ k ];
 				if ( isMinimum && !isPlateau )
 				{
-					if ( isContractible && mergeEdge( g, e1, k, dj, merger, merges ) )
+					if ( isContractible && noNonContractibleNeighbor && mergeEdge( g, e1, k, regionMapping, merger, merges, counts, notify ) )
 						changed = true;
 				}
 				else if ( isPlateau )
 				{
 					final long root = plateausUnionFind.findRoot( k );
 					// no &&= in java
-					isMinimumPlateau[ ( int ) root ] &= isMinimum && isContractible;
+					isValidPlateau[ ( int ) root ] &= isMinimum && isContractible && noNonContractibleNeighbor;
 					if ( !plateauRoots.contains( root ) )
 						plateauRoots.add( root );
 				}
@@ -122,10 +134,10 @@ public class RegionMerging
 				if ( isInPlateau[ k ] )
 				{
 					final long root = plateausUnionFind.findRoot( k );
-					if ( isMinimumPlateau[ ( int ) root ] )
+					if ( isValidPlateau[ ( int ) root ] )
 					{
 						e1.setIndex( k );
-						if ( e1.isValid() && mergeEdge( g, e1, k, dj, merger, merges ) )
+						if ( e1.isValid() && mergeEdge( g, e1, k, regionMapping, merger, merges, counts, notify ) )
 							changed = true;
 					}
 				}
@@ -139,7 +151,7 @@ public class RegionMerging
 			++iteration;
 		}
 
-		return merges;
+		return new ValuePair<>( merges, regionMapping );
 
 	}
 
@@ -147,6 +159,8 @@ public class RegionMerging
 			final UndirectedGraph g,
 			final boolean[] localMinimum,
 			final boolean[] isInPlateau,
+			final boolean[] isNeighborOfNonContractable,
+			final TIntHashSet nonConctractableEdges,
 			final Edge e1,
 			final Edge e2,
 			final HashMapStoreUnionFind plateausUnionFind,
@@ -198,6 +212,9 @@ public class RegionMerging
 
 					minimumValue = Math.min( w2, minimumValue );
 
+					if ( nonConctractableEdges.contains( otherEdgeIndex ) )
+						isNeighborOfNonContractable[ k ] = true;
+
 					if ( w == w2 )
 					{
 						isPlateau = true;
@@ -212,20 +229,28 @@ public class RegionMerging
 		}
 	}
 
-	public static boolean mergeEdge( final UndirectedGraph g, final Edge e, final long index, final HashMapStoreUnionFind dj, final EdgeMerger merger, final TLongArrayList merges )
+	public static boolean mergeEdge( final UndirectedGraph g, final Edge e, final long index, final HashMapStoreUnionFind regionMapping, final EdgeMerger merger, final TLongArrayList merges, final TLongLongHashMap counts, final MergeNotify notify )
 	{
-		final long r1 = dj.findRoot( e.from() );
-		final long r2 = dj.findRoot( e.to() );
+		final long r1 = regionMapping.findRoot( e.from() );
+		final long r2 = regionMapping.findRoot( e.to() );
 		if ( r1 == r2 )
 			return false;
 
-		final long newNode = dj.join( r1, r2 );
-		g.contract( e, newNode, r1, r2, merger );
+		final long c1 = counts.get( r1 );
+		final long c2 = counts.get( r2 );
+
+		final long newNode = regionMapping.join( r1, r2 );
+
+		counts.put( newNode, c1 + c2 );
+
+		counts.remove( newNode == r1 ? r2 : r1 );
+
 		merges.add( index );
 		merges.add( Double.doubleToRawLongBits( e.weight() ) );
+		notify.addMerge( r1, r2, newNode, e.weight() );
+
+		g.contract( e, newNode, r1, r2, merger );
 		return true;
 	}
-
-
 
 }
