@@ -76,16 +76,17 @@ public class RegionMerging
 					continue;
 				final boolean isMinimum = localMinimum[ k ];
 				final boolean isPlateau = isInPlateau[ k ];
+				final boolean isContractible = !nonContractingEdges.contains( k );
 				if ( isMinimum && !isPlateau )
 				{
-					if ( mergeEdge( g, e1, k, dj, merger, merges ) )
+					if ( isContractible && mergeEdge( g, e1, k, dj, merger, merges ) )
 						changed = true;
 				}
 				else if ( isPlateau )
 				{
 					final long root = plateausUnionFind.findRoot( k );
 					// no &&= in java
-					isMinimumPlateau[ ( int ) root ] &= isMinimum && !nonContractingEdges.contains( k );
+					isMinimumPlateau[ ( int ) root ] &= isMinimum && isContractible;
 					if ( !plateauRoots.contains( root ) )
 						plateauRoots.add( root );
 				}
