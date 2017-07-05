@@ -91,20 +91,16 @@ public class RegionMerging
 			}
 
 			for ( int k = 0; k < localMinimum.length; ++k )
-			{
-				if ( e1.isObsolete() )
-					continue;
 				if ( isInPlateau[ k ] )
 				{
 					final long root = plateausUnionFind.findRoot( k );
 					if ( isMinimumPlateau[ ( int ) root ] )
 					{
 						e1.setIndex( k );
-						if ( mergeEdge( g, e1, k, dj, merger, merges ) )
+						if ( e1.isValid() && mergeEdge( g, e1, k, dj, merger, merges ) )
 							changed = true;
 					}
 				}
-			}
 
 //			System.out.println( "At iteration " + iteration + " " + Arrays.toString( localMinimum ) + " " + Arrays.toString( isInPlateau ) );
 			System.out.println( "At iteration " + iteration + " " +
