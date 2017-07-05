@@ -60,12 +60,15 @@ public class RegionMergingTest
 		Assert.assertEquals( 1 - highAffinity, Double.longBitsToDouble( merges.get( 1 ) ), 1e-20 );
 		Assert.assertFalse( e.isValid() );
 
-		for ( int i = 0; i < e.size(); ++i )
+		for ( int i = 0; i < e.size(); ++i ) {
+			e.setIndex( i );
+			Assert.assertTrue( "Edge state for i=" + i + ": " + e.toString(), i == 3 ? e.isObsolete() : e.isValid() );
 			if ( e.isValid() ) {
 				Assert.assertTrue( e.isActive() );
 				Assert.assertEquals( lowAffinity, e.affinity(), 1e-20 );
 				Assert.assertEquals( 1 - lowAffinity, e.weight(), 1e-20 );
 			}
+		}
 
 	}
 
