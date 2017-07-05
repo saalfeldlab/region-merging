@@ -171,17 +171,17 @@ public class RegionMergingExample
 		final Converter< UnsignedShortType, UnsignedShortType > mergedConverter =
 				( input, output ) -> output.set( ( int ) lut.findRoot( input.getIntegerLong() ) );
 
-				final RandomAccessibleInterval< UnsignedShortType > merged = Converters.convert( zws, mergedConverter, new UnsignedShortType() );
+		final RandomAccessibleInterval< UnsignedShortType > merged = Converters.convert( zws, mergedConverter, new UnsignedShortType() );
 
-				final RandomAccessibleInterval< ARGBType > mergedColor = Converters.convert( merged, cmapConverter, new ARGBType() );
+		final RandomAccessibleInterval< ARGBType > mergedColor = Converters.convert( merged, cmapConverter, new ARGBType() );
 
-				new ImageJ();
-				ImageJFunctions.show( zws, "ock" );
-				ImageJFunctions.show( converted, "orig" );
-				ImageJFunctions.show( mergedColor, "merged" );
-				System.out.println( "number of merges: " + merges.size() / 2 );
-				ImageJFunctions.show( merged, "nocolor" );
-				ImageJFunctions.show( aff, "aff" );
+		new ImageJ();
+		ImageJFunctions.show( zws, "ock" );
+		ImageJFunctions.show( converted, "orig" );
+		ImageJFunctions.show( mergedColor, "merged" );
+		System.out.println( "number of merges: " + merges.size() / 2 );
+		ImageJFunctions.show( merged, "nocolor" );
+		ImageJFunctions.show( aff, "aff" );
 
 	}
 }
