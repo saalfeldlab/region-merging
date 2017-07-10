@@ -17,6 +17,17 @@ public interface EdgeWeight extends EdgeDataSize
 
 	public double weight( Edge e, long count1, long count2 );
 
+	public static class OneMinusAffinity implements EdgeWeight, Serializable
+	{
+
+		@Override
+		public double weight( final Edge e, final long count1, final long count2 )
+		{
+			return 1.0 - e.affinity();
+		}
+
+	}
+
 	public static class FunkyWeight implements EdgeWeight, Serializable
 	{
 		@Override
