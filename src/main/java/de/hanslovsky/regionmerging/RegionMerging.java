@@ -91,7 +91,7 @@ public class RegionMerging
 					e1.setActive();
 				}
 				else if ( e1.isObsolete() )
-					e1.weight( Double.MAX_VALUE );
+					e1.weight( Double.POSITIVE_INFINITY );
 			}
 			final boolean[] localMinimum = new boolean[ e1.size() ];
 			Arrays.fill( localMinimum, true );
