@@ -26,8 +26,6 @@ import net.imglib2.util.ValuePair;
 public class RegionMerging
 {
 
-	public static int minimumMultiplicity = 5;
-
 	public static Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
 	public static class Stringify
@@ -51,7 +49,7 @@ public class RegionMerging
 
 	public static Pair< TLongArrayList, HashMapStoreUnionFind > mergeLocallyMinimalEdges( final UndirectedGraph g, final EdgeMerger merger, final EdgeWeight edgeWeight, final TLongLongHashMap counts, final double threshold, final MergeNotify notify )
 	{
-		return mergeLocallyMinimalEdges( g, merger, edgeWeight, counts, threshold, new TIntHashSet(), notify );
+		return mergeLocallyMinimalEdges( g, merger, edgeWeight, counts, threshold, 0, new TIntHashSet(), notify );
 	}
 
 	public static Pair< TLongArrayList, HashMapStoreUnionFind > mergeLocallyMinimalEdges(
@@ -60,6 +58,7 @@ public class RegionMerging
 			final EdgeWeight edgeWeight,
 			final TLongLongHashMap counts,
 			final double threshold,
+			final int minimumMultiplicity,
 			final TIntHashSet nonContractingEdges,
 			final MergeNotify notify )
 	{
