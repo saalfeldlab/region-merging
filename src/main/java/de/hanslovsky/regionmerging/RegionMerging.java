@@ -26,6 +26,8 @@ import net.imglib2.util.ValuePair;
 public class RegionMerging
 {
 
+	public static int minimumMultiplicity = 5;
+
 	public static Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
 	public static class Stringify
@@ -117,7 +119,7 @@ public class RegionMerging
 				final boolean noNonContractibleNeighbor = !isNeighborOfNonContractable[ k ];
 				if ( isMinimum && !isPlateau )
 				{
-					if ( isContractible && noNonContractibleNeighbor && mergeEdge( g, e1, k, regionMapping, merger, merges, counts, notify ) )
+					if ( isContractible && noNonContractibleNeighbor && e1.multiplicity() > minimumMultiplicity && mergeEdge( g, e1, k, regionMapping, merger, merges, counts, notify ) )
 						changed = true;
 				}
 				else if ( isPlateau )
@@ -131,13 +133,14 @@ public class RegionMerging
 			}
 
 			for ( int k = 0; k < localMinimum.length; ++k )
+
 				if ( isInPlateau[ k ] )
 				{
 					final long root = plateausUnionFind.findRoot( k );
 					if ( isValidPlateau[ ( int ) root ] )
 					{
 						e1.setIndex( k );
-						if ( e1.isValid() && mergeEdge( g, e1, k, regionMapping, merger, merges, counts, notify ) )
+						if ( e1.isValid() && e1.multiplicity() > minimumMultiplicity && mergeEdge( g, e1, k, regionMapping, merger, merges, counts, notify ) )
 							changed = true;
 					}
 				}
