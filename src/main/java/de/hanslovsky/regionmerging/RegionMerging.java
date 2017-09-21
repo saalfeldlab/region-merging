@@ -101,7 +101,7 @@ public class RegionMerging
 
 			final HashMapStoreUnionFind plateausUnionFind = new HashMapStoreUnionFind();
 
-			findMinimaAndPlateaus( g, localMinimum, isInPlateau, isNeighborOfNonContractable, nonContractingEdges, e1, e2, plateausUnionFind, threshold );
+			findMinimaAndPlateaus( g, localMinimum, isInPlateau, isNeighborOfNonContractable, nonContractingEdges, e1, e2, plateausUnionFind, threshold, minimumMultiplicity );
 
 			final boolean[] isValidPlateau = new boolean[ e1.size() ];
 			Arrays.fill( isValidPlateau, true );
@@ -166,7 +166,8 @@ public class RegionMerging
 			final Edge e1,
 			final Edge e2,
 			final HashMapStoreUnionFind plateausUnionFind,
-			final double threshold )
+			final double threshold,
+			final int minimumMultiplicity )
 	{
 
 		final long[] connectedNodes = new long[ 2 ];
@@ -210,6 +211,9 @@ public class RegionMerging
 						continue;
 
 					e2.setIndex( otherEdgeIndex );
+					if ( e2.multiplicity() < minimumMultiplicity )
+						continue;
+
 					final double w2 = e2.weight();
 
 					minimumValue = Math.min( w2, minimumValue );
