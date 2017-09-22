@@ -253,6 +253,8 @@ public class RegionMerging
 
 		merges.add( index );
 		merges.add( Double.doubleToRawLongBits( e.weight() ) );
+		merges.add( r1 );
+		merges.add( r2 );
 		notify.addMerge( r1, r2, newNode, e.weight() );
 
 		g.contract( e, newNode, r1, r2, merger );
