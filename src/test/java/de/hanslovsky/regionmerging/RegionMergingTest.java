@@ -59,7 +59,7 @@ public class RegionMergingTest
 
 		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.5, NOTIFY ).getA();
 
-		Assert.assertEquals( 2, merges.size() );
+		Assert.assertEquals( 4, merges.size() );
 		Assert.assertEquals( 3, merges.get( 0 ) );
 
 		e.setIndex( ( int ) merges.get( 0 ) );
@@ -118,9 +118,9 @@ public class RegionMergingTest
 
 		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.8, NOTIFY ).getA();
 
-		Assert.assertEquals( 4, merges.size() );
+		Assert.assertEquals( 8, merges.size() );
 		Assert.assertEquals( 3, merges.get( 0 ) );
-		Assert.assertEquals( 5, merges.get( 2 ) );
+		Assert.assertEquals( 5, merges.get( 4 ) );
 	}
 
 	@Test
@@ -161,7 +161,7 @@ public class RegionMergingTest
 
 		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 1.0, NOTIFY ).getA();
 
-		Assert.assertEquals( 2 * e.size(), merges.size() );
+		Assert.assertEquals( 4 * e.size(), merges.size() );
 
 		for ( int i = 0; i < e.size(); ++i )
 		{
