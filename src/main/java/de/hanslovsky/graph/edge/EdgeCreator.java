@@ -135,7 +135,7 @@ public interface EdgeCreator extends EdgeDataSize
 		@Override
 		public DoubleStream createData( final double weight, final double affinity, final long from, final long to, final long multiplicity )
 		{
-			final int bin = ( int ) ( ( affinity - min ) / binWidth );
+			final int bin = Math.min( ( int ) ( ( affinity - min ) / binWidth ), nBins - 1 );
 			return IntStream.range( 0, dataSize() ).mapToDouble( i -> Edge.ltd( i == 0 ? 1 : i == bin + 1 ? 1 : 0 ) );
 		}
 
