@@ -86,6 +86,8 @@ public interface EdgeMerger extends Serializable, EdgeDataSize
 			{
 				final long d1 = Edge.dtl( source.getData( entry ) );
 				final long d2 = Edge.dtl( target.getData( entry ) );
+				if ( source.from() == 79 && source.to() == 290 || source.from() == 290 && source.to() == 79 || source.from() == 291 && source.to() == 290 || source.from() == 290 && source.to() == 291 )
+					System.out.println( "WWWWTTTTF!!! " + source +" " + target );
 				if ( entry == 0 && ( d1 == 0 || d2 == 0 ) )
 					// TODO remove this check
 					throw new RuntimeException( "SOMETHING WRONG HERE!!!!" + source + " " + target + " " + dataSize + " " + source.getDataSize() + " " + target.getDataSize() );

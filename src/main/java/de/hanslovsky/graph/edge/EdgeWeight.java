@@ -81,6 +81,9 @@ public interface EdgeWeight extends EdgeDataSize
 			final LongStream bins = IntStream.range( 1, nBins + 1 ).mapToLong( i -> Edge.dtl( e.getData( i ) ) );
 			final double medianAffinity = medianFromHistogram( nBins, bins, count, min, binWidth );
 
+			if ( e.from() == 290 || e.to() == 290 )
+				System.out.println( "CALCULATING MEDIANAFFINITY " + medianAffinity + " " + e  );
+
 			LOG.trace( "Setting weight: " + medianAffinity + " " + ( 1 - medianAffinity ) + " " + Arrays.toString( IntStream.range( 1, nBins + 1 ).mapToLong( i -> Edge.dtl( e.getData( i ) ) ).toArray() ) + " " + count );
 
 
