@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.PrimitiveIterator.OfLong;
-import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -14,6 +13,8 @@ import org.apache.log4j.Logger;
 
 public interface EdgeWeight extends EdgeDataSize
 {
+
+	public static final Logger LOG = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
 
 	public double weight( Edge e, long count1, long count2 );
 
@@ -216,33 +217,6 @@ public interface EdgeWeight extends EdgeDataSize
 		{
 			return w.dataSize();
 		}
-
-	}
-
-	public static void main( final String[] args )
-	{
-		final int N = 100000;
-		final double min = -5.0;
-		final double max = 5.0;
-		final Random rng = new Random();
-		final double[] samples = new double[ N ];
-		for ( int i = 0; i < N; ++i )
-//			samples[ i ] = Math.max( Math.min( rng.nextGaussian(), max ), min );
-			samples[ i ] = rng.nextDouble() * ( max - min ) + min;
-
-		final int nBins = 10;
-		final double binWidth = ( max - min ) / nBins;
-		final long[] histogram = new long[ nBins ];
-		for ( int i = 0; i < N; ++i )
-		{
-			final int index = Math.min( ( int ) ( ( samples[ i ] - min ) / binWidth ), nBins - 1 );
-			++histogram[ index ];
-		}
-		System.out.println( Arrays.toString( histogram ) );
-
-		Arrays.sort( samples );
-		final double medianRef = samples[ N / 2 ];
-		System.out.println( medianRef + " " + MedianAffinityWeight.medianFromHistogram( nBins, Arrays.stream( histogram ), N, min, binWidth ) );
 
 	}
 
