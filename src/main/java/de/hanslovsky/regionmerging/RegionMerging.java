@@ -2,7 +2,6 @@ package de.hanslovsky.regionmerging;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
-import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -13,6 +12,7 @@ import de.hanslovsky.graph.edge.Edge;
 import de.hanslovsky.graph.edge.EdgeMerger;
 import de.hanslovsky.graph.edge.EdgeWeight;
 import de.hanslovsky.util.unionfind.HashMapStoreUnionFind;
+import de.hanslovsky.util.unionfind.Stringify;
 import gnu.trove.iterator.TLongIntIterator;
 import gnu.trove.list.array.TDoubleArrayList;
 import gnu.trove.list.array.TLongArrayList;
@@ -27,25 +27,6 @@ public class RegionMerging
 {
 
 	public static Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
-
-	public static class Stringify
-	{
-
-		private final Supplier< String > generator;
-
-		public Stringify( final Supplier< String > generator )
-		{
-			super();
-			this.generator = generator;
-		}
-
-		@Override
-		public String toString()
-		{
-			return generator.get();
-		}
-
-	}
 
 	public static Pair< TLongArrayList, HashMapStoreUnionFind > mergeLocallyMinimalEdges( final UndirectedGraph g, final EdgeMerger merger, final EdgeWeight edgeWeight, final TLongLongHashMap counts, final double threshold, final MergeNotify notify )
 	{

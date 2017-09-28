@@ -10,6 +10,8 @@ import java.util.stream.LongStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.hanslovsky.util.unionfind.Stringify;
+
 public interface EdgeWeight extends EdgeDataSize
 {
 
@@ -78,7 +80,7 @@ public interface EdgeWeight extends EdgeDataSize
 			final LongStream bins = IntStream.range( 1, nBins + 1 ).mapToLong( i -> Edge.dtl( e.getData( i ) ) );
 			final double medianAffinity = medianFromHistogram( nBins, bins, count, min, binWidth );
 
-			LOG.trace( "Setting weight: " + medianAffinity + " " + ( 1 - medianAffinity ) + " " + Arrays.toString( IntStream.range( 1, nBins + 1 ).mapToLong( i -> Edge.dtl( e.getData( i ) ) ).toArray() ) + " " + count );
+			LOG.trace( "{}", new Stringify( () -> String.format( "Setting weight: %f %f %s %d", medianAffinity, 1 - medianAffinity, Arrays.toString( IntStream.range( 1, nBins + 1 ).mapToLong( i -> Edge.dtl( e.getData( i ) ) ).toArray() ), count ) ) );
 
 
 			return 1 - medianAffinity;
@@ -110,7 +112,7 @@ public interface EdgeWeight extends EdgeDataSize
 			final double lower = min + ( lastBinBeforeMedian + 1 ) * binWidth;
 			final double median = lower + ( 0.5 * count - nVisitedBeforeMedian ) / countAt * binWidth;
 
-			LOG.trace( "Calculating median: " + lower + " " + median + " " + lastBinBeforeMedian + " " + countAt + " " + count );
+			LOG.trace( "Calculating median: {} {} {} {} {}", lower, median, lastBinBeforeMedian, countAt, count );
 
 			return median;
 		}
@@ -150,7 +152,7 @@ public interface EdgeWeight extends EdgeDataSize
 			final LongStream bins = IntStream.range( 1, nBins + 1 ).mapToLong( i -> Edge.dtl( e.getData( i ) ) );
 			final double medianAffinity = percentileFromHistogram( nBins, bins, count, min, binWidth, percentile );
 
-			LOG.trace( "Setting weight: " + medianAffinity + " " + ( 1 - medianAffinity ) + " " + Arrays.toString( IntStream.range( 1, nBins + 1 ).mapToLong( i -> Edge.dtl( e.getData( i ) ) ).toArray() ) + " " + count );
+			LOG.trace( "{}", new Stringify( () -> String.format( "Setting weight: %f %f %s %d", medianAffinity, 1 - medianAffinity, Arrays.toString( IntStream.range( 1, nBins + 1 ).mapToLong( i -> Edge.dtl( e.getData( i ) ) ).toArray() ), count ) ) );
 
 			return 1 - medianAffinity;
 		}
@@ -182,7 +184,7 @@ public interface EdgeWeight extends EdgeDataSize
 			final double lower = min + ( lastBinBeforePercentile + 1 ) * binWidth;
 			final double median = lower + ( N - nVisitedBeforePercentile ) / countAt * binWidth;
 
-			LOG.trace( "Calculating median: " + lower + " " + median + " " + lastBinBeforePercentile + " " + countAt + " " + count );
+			LOG.trace( "Calculating median: {} {} {} {} {}", lower, median, lastBinBeforePercentile, countAt, count );
 
 			return median;
 		}
