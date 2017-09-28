@@ -257,8 +257,6 @@ public class RegionMerging
 		merges.add( r2 );
 		notify.addMerge( r1, r2, newNode, e.weight() );
 
-		System.out.println( "Merged edge " + r1 + " " + r2 + e.toString() );
-
 		g.contract( e, newNode, r1, r2, merger );
 		return true;
 	}
