@@ -6,9 +6,8 @@ import java.util.Arrays;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public interface EdgeCreator extends EdgeDataSize
 {
@@ -84,10 +83,7 @@ public interface EdgeCreator extends EdgeDataSize
 	public static class AffinityHistogram extends DataStreamCreator implements EdgeCreator, Serializable
 	{
 
-		public static final Logger LOG = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
-		{
-			LOG.setLevel( Level.INFO );
-		}
+		public static final Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
 		private final int nBins;
 

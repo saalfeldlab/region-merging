@@ -3,9 +3,8 @@ package de.hanslovsky.graph.edge;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public interface EdgeMerger extends Serializable, EdgeDataSize
 {
@@ -56,10 +55,7 @@ public interface EdgeMerger extends Serializable, EdgeDataSize
 	public static class MEDIAN_AFFINITY_MERGER implements EdgeMerger, Serializable
 	{
 
-		public static final Logger LOG = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
-		{
-			LOG.setLevel( Level.INFO );
-		}
+		public static final Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
 		private final int nBins;
 

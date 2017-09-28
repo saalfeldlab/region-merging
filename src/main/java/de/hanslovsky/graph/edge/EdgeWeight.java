@@ -7,14 +7,13 @@ import java.util.PrimitiveIterator.OfLong;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public interface EdgeWeight extends EdgeDataSize
 {
 
-	public static final Logger LOG = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
+	public static final Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
 	public double weight( Edge e, long count1, long count2 );
 
@@ -51,10 +50,7 @@ public interface EdgeWeight extends EdgeDataSize
 	public static class MedianAffinityWeight implements EdgeWeight, Serializable
 	{
 
-		public static final Logger LOG = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
-		{
-			LOG.setLevel( Level.INFO );
-		}
+		public static final Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
 		private final int nBins;
 
@@ -123,10 +119,7 @@ public interface EdgeWeight extends EdgeDataSize
 
 	public static class PercentileAffinityWeight implements EdgeWeight, Serializable
 	{
-		public static final Logger LOG = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
-		{
-			LOG.setLevel( Level.INFO );
-		}
+		public static final Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
 		private final int nBins;
 

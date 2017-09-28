@@ -4,16 +4,16 @@ import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.hanslovsky.graph.edge.EdgeWeight.MedianAffinityWeight;
 
 public class EdgeWeightTest
 {
 
-	public static Logger LOG = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
+	public static Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
 	@Test
 	public void testMedianFromHistogram()
