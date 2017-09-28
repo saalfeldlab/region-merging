@@ -71,7 +71,7 @@ public interface EdgeMerger extends Serializable, EdgeDataSize
 		@Override
 		public Edge merge( final Edge source, final Edge target )
 		{
-			LOG.trace( "Merging edges: " + source + " " + target + " (sizes: " + source.size() + " " + target.size() + ")" );
+			LOG.trace( "Merging edges: %s %s (sizes: %d %d)", source, target, source.size(), target.size() );
 
 			final long m1 = source.multiplicity();
 			final long m2 = target.multiplicity();
