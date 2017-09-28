@@ -97,29 +97,18 @@ public class UndirectedGraph implements Serializable
 			{
 
 				this.e2.setIndex( edgesOfNewNode.get( nodeId ) );
-				final double w1 = this.e1.weight();
-				final double w2 = this.e2.weight();
-
-				// smaller weight edge is in wrong map
-				if ( w1 < w2 )
-				{
-					edgeMerger.merge( this.e2, this.e1 );
-					edgesOfNewNode.put( nodeId, edgeId );
-					this.e2.setObsolete();
-					this.e1.setStale();
-					this.e1.setValid();
-				}
-				else
-				{
-					edgeMerger.merge( this.e1, this.e2 );
-					this.e1.setObsolete();
-					this.e2.setStale();
-					this.e2.setValid();
-				}
+				edgeMerger.merge( this.e1, this.e2 );
+				this.e1.setObsolete();
+				this.e2.setStale();
+				this.e2.setValid();
 			}
 			else
+			{
 				edgesOfNewNode.put( nodeId, edgeId );
+				this.e1.from( newNode );
+				this.e1.to( nodeId );
 //				this.e1.setStale();
+			}
 		}
 
 
