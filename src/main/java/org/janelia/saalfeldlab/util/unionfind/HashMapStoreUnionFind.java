@@ -1,4 +1,4 @@
-package de.hanslovsky.util.unionfind;
+package org.janelia.saalfeldlab.util.unionfind;
 
 import gnu.trove.map.hash.TLongLongHashMap;
 

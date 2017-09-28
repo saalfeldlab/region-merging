@@ -1,4 +1,4 @@
-package de.hanslovsky.regionmerging;
+package org.janelia.saalfeldlab.regionmerging;
 
 public interface MergeNotify
 {

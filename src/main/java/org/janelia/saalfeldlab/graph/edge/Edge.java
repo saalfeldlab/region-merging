@@ -1,4 +1,4 @@
-package de.hanslovsky.graph.edge;
+package org.janelia.saalfeldlab.graph.edge;
 
 import java.io.Serializable;
 import java.util.PrimitiveIterator.OfDouble;

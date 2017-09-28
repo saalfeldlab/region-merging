@@ -1,14 +1,13 @@
-package de.hanslovsky.graph.edge;
+package org.janelia.saalfeldlab.graph.edge;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.janelia.saalfeldlab.graph.edge.EdgeWeight.MedianAffinityWeight;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import de.hanslovsky.graph.edge.EdgeWeight.MedianAffinityWeight;
 
 public class EdgeWeightTest
 {

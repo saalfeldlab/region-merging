@@ -1,13 +1,13 @@
-package de.hanslovsky.graph;
+package org.janelia.saalfeldlab.graph;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 
+import org.janelia.saalfeldlab.graph.edge.Edge;
+import org.janelia.saalfeldlab.graph.edge.EdgeMerger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.hanslovsky.graph.edge.Edge;
-import de.hanslovsky.graph.edge.EdgeMerger;
 import gnu.trove.iterator.TLongIntIterator;
 import gnu.trove.list.array.TDoubleArrayList;
 import gnu.trove.map.hash.TLongIntHashMap;

@@ -1,4 +1,4 @@
-package de.hanslovsky.graph.edge;
+package org.janelia.saalfeldlab.graph.edge;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
@@ -7,10 +7,9 @@ import java.util.PrimitiveIterator.OfLong;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
+import org.janelia.saalfeldlab.util.unionfind.Stringify;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import de.hanslovsky.util.unionfind.Stringify;
 
 public interface EdgeWeight extends EdgeDataSize
 {

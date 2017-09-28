@@ -1,16 +1,18 @@
-package de.hanslovsky.regionmerging;
+package org.janelia.saalfeldlab.regionmerging;
 
 import java.lang.invoke.MethodHandles;
 
+import org.janelia.saalfeldlab.graph.UndirectedGraph;
+import org.janelia.saalfeldlab.graph.edge.Edge;
+import org.janelia.saalfeldlab.graph.edge.EdgeMerger;
+import org.janelia.saalfeldlab.graph.edge.EdgeWeight;
+import org.janelia.saalfeldlab.regionmerging.MergeNotify;
+import org.janelia.saalfeldlab.regionmerging.RegionMerging;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.hanslovsky.graph.UndirectedGraph;
-import de.hanslovsky.graph.edge.Edge;
-import de.hanslovsky.graph.edge.EdgeMerger;
-import de.hanslovsky.graph.edge.EdgeWeight;
 import gnu.trove.list.array.TDoubleArrayList;
 import gnu.trove.list.array.TLongArrayList;
 import gnu.trove.map.hash.TLongLongHashMap;
