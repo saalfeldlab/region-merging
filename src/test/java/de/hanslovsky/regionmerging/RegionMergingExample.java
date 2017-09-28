@@ -1,6 +1,10 @@
 package de.hanslovsky.regionmerging;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Random;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import de.hanslovsky.graph.UndirectedGraph;
 import de.hanslovsky.graph.edge.Edge;
@@ -32,6 +36,9 @@ import net.imglib2.view.Views;
 
 public class RegionMergingExample
 {
+
+	public static Logger LOG = LogManager.getLogger( MethodHandles.lookup().lookupClass() );
+
 	public static void main( final String[] args )
 	{
 
@@ -179,7 +186,7 @@ public class RegionMergingExample
 		ImageJFunctions.show( zws, "ock" );
 		ImageJFunctions.show( converted, "orig" );
 		ImageJFunctions.show( mergedColor, "merged" );
-		System.out.println( "number of merges: " + merges.size() / 2 );
+		LOG.info( "number of merges: " + merges.size() / 2 );
 		ImageJFunctions.show( merged, "nocolor" );
 		ImageJFunctions.show( aff, "aff" );
 
