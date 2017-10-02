@@ -6,8 +6,6 @@ import org.janelia.saalfeldlab.graph.UndirectedGraph;
 import org.janelia.saalfeldlab.graph.edge.Edge;
 import org.janelia.saalfeldlab.graph.edge.EdgeMerger;
 import org.janelia.saalfeldlab.graph.edge.EdgeWeight;
-import org.janelia.saalfeldlab.regionmerging.MergeNotify;
-import org.janelia.saalfeldlab.regionmerging.RegionMerging;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -19,8 +17,6 @@ import gnu.trove.map.hash.TLongLongHashMap;
 
 public class RegionMergingTest
 {
-
-	public static MergeNotify NOTIFY = ( n1, n2, nn, w ) -> {};
 
 	public static Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
@@ -59,7 +55,7 @@ public class RegionMergingTest
 
 		final UndirectedGraph g = new UndirectedGraph( 9, store, merger );
 
-		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.5, NOTIFY ).getA();
+		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.5 ).getA();
 
 		Assert.assertEquals( 4, merges.size() );
 		Assert.assertEquals( 3, merges.get( 0 ) );
@@ -118,7 +114,7 @@ public class RegionMergingTest
 
 		final UndirectedGraph g = new UndirectedGraph( 9, store, merger );
 
-		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.8, NOTIFY ).getA();
+		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 0.8 ).getA();
 
 		Assert.assertEquals( 8, merges.size() );
 		Assert.assertEquals( 3, merges.get( 0 ) );
@@ -161,7 +157,7 @@ public class RegionMergingTest
 
 		final UndirectedGraph g = new UndirectedGraph( 9, store, merger );
 
-		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 1.0, NOTIFY ).getA();
+		final TLongArrayList merges = RegionMerging.mergeLocallyMinimalEdges( g, merger, ew, counts, 1.0 ).getA();
 
 		Assert.assertEquals( 4 * e.size(), merges.size() );
 
