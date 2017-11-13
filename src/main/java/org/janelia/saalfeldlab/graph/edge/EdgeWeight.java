@@ -16,36 +16,17 @@ public interface EdgeWeight extends EdgeDataSize
 
 	public static final Logger LOG = LoggerFactory.getLogger( MethodHandles.lookup().lookupClass() );
 
-	public double weight( Edge e, long count1, long count2 );
+	public double weight( Edge e );
 
 	public static class OneMinusAffinity implements EdgeWeight, Serializable
 	{
 
 		@Override
-		public double weight( final Edge e, final long count1, final long count2 )
+		public double weight( final Edge e )
 		{
 			return 1.0 - e.affinity();
 		}
 
-	}
-
-	public static class FunkyWeight implements EdgeWeight, Serializable
-	{
-		@Override
-		public double weight( final Edge e, final long c1, final long c2 )
-		{
-			return Math.min( c1, c2 ) * ( 1.0 - e.affinity() );
-		}
-	}
-
-	public static class FunkyWeightSquared implements EdgeWeight, Serializable
-	{
-		@Override
-		public double weight( final Edge e, final long c1, final long c2 )
-		{
-			final double diff = 1.0 - e.affinity();
-			return Math.min( c1, c2 ) * diff * diff;
-		}
 	}
 
 	public static class MedianAffinityWeight implements EdgeWeight, Serializable
@@ -71,7 +52,7 @@ public interface EdgeWeight extends EdgeDataSize
 		}
 
 		@Override
-		public double weight( final Edge e, final long count1, final long count2 )
+		public double weight( final Edge e )
 		{
 			// as in
 			// http://math.stackexchange.com/questions/879052/how-to-find-mean-and-median-from-histogram
@@ -143,7 +124,7 @@ public interface EdgeWeight extends EdgeDataSize
 		}
 
 		@Override
-		public double weight( final Edge e, final long count1, final long count2 )
+		public double weight( final Edge e )
 		{
 			// as in
 			// http://math.stackexchange.com/questions/879052/how-to-find-mean-and-median-from-histogram
@@ -187,31 +168,6 @@ public interface EdgeWeight extends EdgeDataSize
 
 			return median;
 		}
-	}
-
-	public static class MedianAffinityLogCountWeight implements EdgeWeight, Serializable
-	{
-
-		private final MedianAffinityWeight w;
-
-		public MedianAffinityLogCountWeight( final int nBins, final double min, final double max )
-		{
-			this.w = new MedianAffinityWeight( nBins, min, max );
-		}
-
-		@Override
-		public double weight( final Edge e, final long count1, final long count2 )
-		{
-			final double w = this.w.weight( e, count1, count2 );
-			return Math.log10( 1 + w * Math.max( count1, count2 ) );
-		}
-
-		@Override
-		public int dataSize()
-		{
-			return w.dataSize();
-		}
-
 	}
 
 }
